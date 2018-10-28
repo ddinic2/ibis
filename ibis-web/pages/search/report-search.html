@@ -1,0 +1,366 @@
+<div class="row">
+    <div class="col-lg-12 borderBottom">
+        <h3>Report</h3>
+    </div>
+</div>
+<div class="row mgT20">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+          <input type="text" placeholder="Mac: address" ng-model="selectedMac"
+                 uib-typeahead="m.mac for m in contracts | filter:$viewValue | limitTo:8"
+                 typeahead-on-select="onSelect($item, $model, $label)"
+                 class="form-control searchInput">
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <select type="text" ng-model="selectedContract" ng-change="pickContract()" ng-options="m.contractId for m in contracts | filter:$viewValue | limitTo:8" class="form-control searchSelect">
+            <option value="" disabled selected>Contract ID</option>
+        </select>
+    </div>
+    <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12 text-left">
+        <button type="button" ng-click="resetFilters()" class="btn btn-secondary btn-xs"> <i class="fas fa-sync iconS"></i></button>
+        <button type="button" ng-click="callFilter()" class="btn btn-info borRad">Apply filters</button>
+    </div>
+</div>
+<div ng-if="applyingFilter" class="row">
+    <div class="col-lg-2 col-md-4 col-sm-5 col-xs-12 infoDiv">
+        <strong><small>Currently viewing data:</small></strong> <br>
+        <small>MAC Address: {{$item.mac}}</small><small ng-if="!$item">{{selectedContract.mac}}</small><br>
+        <small>ContractID: {{$item.contractId}}</small><small ng-if="!$item">{{selectedContract.contractId}}</small>
+    </div>
+    <div class="col-lg-8 col-md-6 col-sm-4 text-center">
+        <div class="btn-group btn-group-sm mgT20" role="group" aria-label="Basic example">
+
+                <input type="text" style="display: none"
+                       onkeydown="return false"
+                       uib-datepicker-popup="dd.MM.yyyy"
+                       ng-model="oneDay"
+                       class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty ng-valid-required ng-valid-date"
+                       is-open="popup1.opened"
+                       datepicker-options="startDateOptions"
+                       ng-required="true"
+                       close-text="Close"
+                       alt-input-formats="altInputFormats" />
+
+            <button type="button" class="btn btn-primary myRadiusL" ng-click="open1()">1 Day</button>
+            <button type="button" class="btn btn-primary myRadiusR" ng-click="open2()">7 Days</button>
+            <input type="text" style="display: none"
+                   onkeydown="return false"
+                   uib-datepicker-popup="dd.MM.yyyy"
+                   ng-model="lastSeven"
+                   class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty ng-valid-required ng-valid-date"
+                   is-open="popup2.opened"
+                   datepicker-options="endDateOptions"
+                   ng-required="true"
+                   ng-change="lastSevenValue()"
+                   close-text="Close"
+                   alt-input-formats="altInputFormats" />
+        </div><br>
+        <small ng-if="oneDay || lastSeven">{{oneDay | date:'dd.MM.yyyy.'}} to {{lastSeven | date:'dd.MM.yyyy.'}}</small>
+    </div>
+</div>
+
+<div class="row" ng-if="applyingFilter">
+    <div class="text-right">
+        <button type="button" ng-if="tab1" ng-click="showDetails()" class="btn btn-info btn-sm mgR">HGw Info  <i id="caretDown" class="fas fa-caret-down"></i></button>
+    </div>
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs">
+            <li id="activeId1">
+                <a ng-click="setTab1()" data-toggle="tab">Tables</a>
+            </li>
+            <li id="activeId2">
+                <a ng-click="setTab2()" data-toggle="tab">Graphs</a>
+            </li>
+        </ul>
+        <div class="tab-content ">
+            <div ng-show="tab1">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <div class="firstColItem effect6 hgh">
+                        <div class="floatL">
+                            <strong>Overall Status</strong>
+                        </div>
+                        <div class="floatR">
+                            <button type="button" ng-click="notDev()" class="btn btn-warning btn-sm text-right">Medium</button>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh">
+                        <div class="floatL">
+                            <strong>RSS Status</strong>
+                        </div>
+                        <div class="floatR">
+                            <button type="button" ng-click="notDev()" class="btn btn-danger btn-sm text-right">Bad</button>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh">
+                        <div class="floatL">
+                            <strong>Client RSS Status</strong>
+                        </div>
+                        <div class="floatR">
+                            <button type="button" ng-click="notDev()" class="btn btn-warning btn-sm text-right">Medium</button>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh">
+                        <div class="floatL">
+                            <strong>Sticky Client Status</strong>
+                        </div>
+                        <div class="floatR">
+                            <button type="button" ng-click="notDev()" class="btn btn-success btn-sm text-right">Good</button>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh3">
+                        <div class="floatL">
+                            <strong class="mgB">Interference Status-overall</strong><br><br>
+                            <strong class="mgB">Interference Status Co-chanel</strong><br><br>
+                            <strong class="mgB">Interference Status-Adjacent</strong>
+                        </div>
+                        <div class="floatR">
+                            <button type="button" ng-click="notDev()" class="btn btn-warning btn-sm text-right mgB8">Medium</button><br>
+                            <button type="button" ng-click="notDev()" class="btn btn-success btn-sm text-right mgB8">Good</button><br>
+                            <button type="button" ng-click="notDev()" class="btn btn-danger btn-sm text-right">Bad</button>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh2">
+                        <div class="floatL">
+                            <strong>HGw Interference</strong><br>
+                            <small>UniFi</small> <button type="button" ng-click="notDev()" class="btn btn-success btn-sm">Good</button><br>
+                        </div>
+                        <div class="floatR"><br>
+                            <small>Home</small>
+                            <button type="button" ng-click="notDev()" class="btn btn-warning btn-sm">Medium</button>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh2">
+                        <div class="floatL">
+                            <strong>Retransmision Status</strong><br><br>
+                            <small>HGw Number of retransmissions</small>
+                        </div>
+                        <div class="floatR">
+                            <button type="button" id="mgB10" ng-click="notDev()" class="btn btn-danger btn-sm">Bad</button><br>
+                            <small id="numSm">5515</small>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh2">
+                        <div class="floatL">
+                            <small>Total Number of Clients</small><br><br>
+                            <small>Max. number of concurent clients</small>
+                        </div>
+                        <div class="floatR">
+                            <small>120</small><br><br>
+                            <small>10</small>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh2">
+                        <div class="floatL">
+                            <strong>HGw Combined Status</strong><br><br>
+                            <small>HGw Number of clients</small>
+                        </div>
+                        <div class="floatR">
+                            <br><br><small>15</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <div class="firstColItem effect6 hgh4">
+                        <div class="floatL">
+                            <strong>HGw Bitrate [Mbps]</strong><br>
+                            <table class="table table-responsive">
+                                <tbody>
+                                <tr>
+                                    <td class="width120">KPI Name</td>
+                                    <td>Min</td>
+                                    <td>Avg</td>
+                                    <td>Max</td>
+                                    <td>Last</td>
+                                </tr>
+                                <tr class="active">
+                                    <td><strong>Bitrate</strong></td>
+                                    <td>15</td>
+                                    <td class="redF">15</td>
+                                    <td>15</td>
+                                    <td>15</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh5">
+                        <div class="floatL">
+                            <small>HGW total traffic [GB]</small>
+                        </div>
+                        <div class="floatR">
+                            <small>5.7</small>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh4">
+                        <div class="floatL">
+                            <strong>HGw RSS</strong><br>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td class="width120">KPI Name</td>
+                                    <td>Min</td>
+                                    <td>Avg</td>
+                                    <td>Max</td>
+                                    <td>Last</td>
+                                </tr>
+                                <tr class="active">
+                                    <td><strong>RSS[dBm]</strong></td>
+                                    <td>-40</td>
+                                    <td class="redF">-35</td>
+                                    <td>-30</td>
+                                    <td>-32</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="firstColItem effect6 hgh4">
+                        <div class="floatL">
+                            <strong>HGw Interference network RSS</strong><br>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td class="width120">KPI Name</td>
+                                    <td></td>
+                                    <td>Avg</td>
+                                    <td>Max</td>
+                                    <td>Last</td>
+                                </tr>
+                                <tr class="active">
+                                    <td><strong>RSS[dBm]</strong></td>
+                                    <td></td>
+                                    <td>-35</td>
+                                    <td>-30</td>
+                                    <td>-32</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                             <pie-with-legend title="WiFi connected time" data="wiFiConnected">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                            <pie-with-legend title="HGw Wifi Usage" data="hGwWifiUsage">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                            <pie-with-legend title="HGw Interference" data="hGwWifiUsage">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                            <pie-with-legend title="HGw Interference Home" data="hGwWifiUsage">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                            <pie-with-legend title="HGw Channel" data="hGwChannel">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                            <pie-with-legend title="HGw Percent of time with Sticky Clients" data="wiFiConnected">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                            <pie-with-legend title="HGW Client's RSS Status" data="hGwWifiUsage">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                    <div class="firstColItem effect6 hgh6">
+                        <div class="floatL">
+                            <pie-with-legend title="HGW RSS Status" data="hGwWifiUsage">Wifi connected time</pie-with-legend>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                    <div class="firstColItem effect6 hgh7" id="togleDiv">
+                        <div class="floatCenter text-center">
+                            <strong>HGw Info</strong><br>
+                            <hr>
+                        </div>
+                        <div class="floatL">
+                            <small class="hgwInfoSmall">Wifi enabled:</small><br>
+                            <small class="hgwInfoSmall">HGW stand:</small><br>
+                            <small class="hgwInfoSmall">IP Address:</small><br>
+                            <small class="hgwInfoSmall">MAC:</small><br>
+                            <small class="hgwInfoSmall">ContractID:</small><br>
+                            <small class="hgwInfoSmall">Auto chanel:</small><br>
+                            <small class="hgwInfoSmall">SSID:</small><br>
+                            <small class="hgwInfoSmall">Chanel:</small><br>
+                            <small class="hgwInfoSmall">Sec:</small><br>
+                            <small class="hgwInfoSmall">Band:</small><br>
+                            <small class="hgwInfoSmall">SSID:</small><br>
+                            <small class="hgwInfoSmall">Bandwith:</small><br>
+                            <small class="hgwInfoSmall">Description:</small><br>
+                            <small class="hgwInfoSmall">Equipment:</small><br>
+                        </div>
+                        <div class="floatR">
+                            <small class="hgwInfoSmall"><i class="fas fa-check myIcoColor"></i> Yes</small><br>
+                            <small class="hgwInfoSmall">802.11b</small><br>
+                            <small class="hgwInfoSmall">192.168.1.1</small><br>
+                            <small class="hgwInfoSmall">{{$item.mac}}</small><small class="hgwInfoSmall" ng-if="!$item">{{selectedContract.mac}}</small><br>
+                            <small class="hgwInfoSmall">{{$item.contractId}}</small><small class="hgwInfoSmall" ng-if="!$item">{{selectedContract.contractId}}</small><br>
+                            <small class="hgwInfoSmall"><i class="fas fa-check myIcoColor"></i> Yes</small><br>
+                            <small class="hgwInfoSmall">ibis-wifi</small><br>
+                            <small class="hgwInfoSmall">6</small><br>
+                            <small class="hgwInfoSmall">WPA/PSK</small><br>
+                            <small class="hgwInfoSmall">2.4GHz</small><br>
+                            <small class="hgwInfoSmall">No</small><br>
+                            <small class="hgwInfoSmall">22MHZ</small><br>
+                            <small class="hgwInfoSmall">Modem</small><br>
+                            <small class="hgwInfoSmall">ABC</small><br>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div ng-show="tab2" id="myDiv">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
+                    <div class="chartSize">
+                        <hc-chart options="chartOptions">Placeholder for generic chart</hc-chart>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
+                    <div class="chartSize">
+                        <hc-pie-chart title="Browser usage" data="pieData">Placeholder for pie chart</hc-pie-chart>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
+                    <div class="chartSize">
+                        <hc-chart options="chartOptions1">Placeholder for generic chart</hc-chart>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
+                    <div class="chartSize">
+                        <hc-chart options="chartOptions2">Placeholder for generic chart</hc-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
