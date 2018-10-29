@@ -201,6 +201,9 @@ strong{
     .hgh6{
         width:190px;
     }
+    #rightIfSmall{
+        float: right;
+    }
 }
 @media only screen and (max-width: 425px) {
     .borRad{
