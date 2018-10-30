@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('PhoneBook')
+        .module('Ibis')
         .config(routeFn);
 
     routeFn.$inject = ['$routeProvider'];

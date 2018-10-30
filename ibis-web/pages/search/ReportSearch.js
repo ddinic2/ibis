@@ -2,7 +2,7 @@
 'use strict';
 
 angular
-    .module('PhoneBook')
+    .module('Ibis')
     .controller('ReportSearch', ctrl);
 
 ctrl.$inject = ['$scope', '$routeParams', '$filter', '$location', '$uibModal', '$route', 'toastr', 'ProductService', '$timeout', '$q', '$log'];
@@ -16,22 +16,17 @@ function ctrl($scope, $routeParams, $filter, $location, $uibModal, $route, toast
     };
 
     $scope.contracts  = ProductService.getContractData();
-    console.log($scope.contracts );
 
     $scope.selectedMac="";
-    console.log($scope.selected);
 
     $scope.pickContract = function () {
         if ($scope.selectedContract){
             $scope.selectedMac = $scope.selectedContract.mac;
-            console.log("kad sel", $scope.selectedContract);
         }
     };
 
     $scope.onSelect = function ($item) {
         $scope.$item = $item;
-        console.log("item",$scope.$item);
-        console.log("item duzina",$scope.$item.mac.length);
         $scope.selectedContract = $scope.$item;
     };
 

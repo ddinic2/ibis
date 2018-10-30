@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('PhoneBook')
+        .module('Ibis')
         .factory('ProductService', serviceFn);
 
     serviceFn.$inject = ['$http', '$route', 'toastr', '$location'];

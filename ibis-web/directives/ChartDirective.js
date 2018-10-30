@@ -1,7 +1,7 @@
 'use strict'
 
 angular
-    .module('PhoneBook')
+    .module('Ibis')
     /*.directive('contactDetails', fun)*/
 
 

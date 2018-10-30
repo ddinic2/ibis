@@ -1,6 +1,6 @@
 
 
-     var app = angular.module('PhoneBook',[
+     var app = angular.module('Ibis',[
          'ngRoute',
          'ngAnimate',
          'ui.bootstrap',
